@@ -58,22 +58,24 @@ require_once "conexion.php";
             $filas = $pdoStatement->fetchAll();
 
             foreach ($filas as $ciclo) {
-                $pdoStatement2 = $pdo->prepare("SELECT * FROM ciclo WHERE id_ciclo=?");
-                $pdoStatement2->bindParam(1, $ciclo['id_ciclo']);
-                $pdoStatement2->execute();
-                $filas2 = $pdoStatement2->fetchAll();
-
                 echo "<tr>";
                 echo "<td>".$ciclo['codigo']."</td>";
                 echo "<td>".$ciclo['name']."</td>";
                 echo "<td>";
-                // Si el alumno está matriculado en el ciclo, mostrar el botón de desmatricularse
-                $pdoStatement3 = $pdo->prepare("SELECT * FROM usuario_ciclo WHERE id_user = ? AND id_ciclo = ?");
+                echo "<form method='post'>";
+                // Si el alumno está matriculado en algún módulo del ciclo
+                $pdoStatement3 = $pdo->prepare("
+                    SELECT DISTINCT um.id_user 
+                    FROM user_modulo um
+                    JOIN ciclo_tiene_modulo ctm ON um.id_modulo = ctm.id_modulo
+                    WHERE um.id_user = ? AND ctm.id_ciclo = ?");
                 $pdoStatement3->bindParam(1, $_SESSION['usuario_id']);
                 $pdoStatement3->bindParam(2, $ciclo['id_ciclo']);
                 $pdoStatement3->execute();
                 $matriculado = $pdoStatement3->fetch();
+                
                 if ($matriculado) {
+                    echo "<input type='hidden' name='ciclo_id' value='".$ciclo['id_ciclo']."'>";
                     echo "<button type='submit' formaction='desmatriculaCiclo.php'>Desmatricularse</button>";
                 }
                 echo "</form>";
@@ -83,17 +85,26 @@ require_once "conexion.php";
             ?>
         </tbody>
     </table>
+
     <?php
-    $pdoStatement = $pdo->prepare("SELECT * FROM usuario_ciclo WHERE id_user = ?");
+    // Consulta para obtener los módulos del usuario
+    $pdoStatement = $pdo->prepare("
+        SELECT DISTINCT m.*, c.name AS ciclo_name, p.name AS profesor_name, p.lastname AS profesor_lastname
+        FROM modulo m
+        JOIN ciclo_tiene_modulo ctm ON m.id_modulo = ctm.id_modulo
+        JOIN ciclo c ON ctm.id_ciclo = c.id_ciclo
+        JOIN user_modulo um ON m.id_modulo = um.id_modulo
+        LEFT JOIN profesor p ON ctm.id_profesor = p.id_profesor
+        WHERE um.id_user = ?
+        ORDER BY c.name, m.curso, m.name
+    ");
+    
     $pdoStatement->bindParam(1, $_SESSION['usuario_id']);
     $pdoStatement->execute();
-    $matriculas = $pdoStatement->fetchAll();
+    $modulos = $pdoStatement->fetchAll();
 
-    if (!empty($matriculas)) {
+    if (!empty($modulos)) {
         echo "<h2>Módulos</h2>";
-        echo "<form method='post'>";
-        echo "<button type='submit' formaction='matriculaModulo.php'>Matricularse</button>";
-        echo "</form>";
         echo '<table class="product-table">
             <thead>
                 <tr>
@@ -102,34 +113,28 @@ require_once "conexion.php";
                     <th>Curso</th>
                     <th>Horas</th>
                     <th>Profesor</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>';
 
-        foreach ($matriculas as $matricula) {
-            $pdoStatement2 = $pdo->prepare("SELECT m.name AS modulo_name, c.name AS ciclo_name, p.name AS profesor_name, p.lastname AS profesor_lastname, m.curso, m.horas_totales 
-                                            FROM modulo m 
-                                            JOIN ciclo_tiene_modulo ctm ON m.id_modulo = ctm.id_modulo 
-                                            JOIN ciclo c ON ctm.id_ciclo = c.id_ciclo 
-                                            LEFT JOIN profesor p ON ctm.id_profesor = p.id_profesor
-                                            WHERE c.id_ciclo = ?");
-            $pdoStatement2->bindParam(1, $matricula['id_ciclo']);
-            $pdoStatement2->execute();
-            $modulos = $pdoStatement2->fetchAll();
-
-            foreach ($modulos as $modulo) {
-                echo "<tr>";
-                echo "<td>".$modulo['modulo_name']."</td>";
-                echo "<td>".$modulo['ciclo_name']."</td>";
-                echo "<td>".$modulo['curso']."</td>";
-                echo "<td>".$modulo['horas_totales']."</td>";
-                echo "<td>".$modulo['profesor_name'].' '.$modulo['profesor_lastname']."</td>";
-                echo "</tr>";
-            }
+        foreach ($modulos as $modulo) {
+            echo "<tr>";
+            echo "<td>".$modulo['name']."</td>";
+            echo "<td>".$modulo['ciclo_name']."</td>";
+            echo "<td>".$modulo['curso']."</td>";
+            echo "<td>".$modulo['horas_totales']."</td>";
+            echo "<td>".($modulo['profesor_name'] ? $modulo['profesor_name'].' '.$modulo['profesor_lastname'] : 'Sin asignar')."</td>";
+            echo "<td>";
+            echo "<form method='post'>";
+            echo "<input type='hidden' name='modulo_id' value='".$modulo['id_modulo']."'>";
+            echo "<button type='submit' formaction='desmatriculaModulo.php'>Desmatricularse</button>";
+            echo "</form>";
+            echo "</td>";
+            echo "</tr>";
         }
 
-        echo '</tbody>
-        </table>';
+        echo '</tbody></table>';
     }
     ?>
 </body>

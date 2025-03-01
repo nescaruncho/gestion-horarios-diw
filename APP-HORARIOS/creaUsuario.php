@@ -21,7 +21,7 @@ if (empty($_SESSION['csrf_token'])) {
 </head>
 <body>
     <div class="form-container">
-        <form action="validaRexistro.php" method="post">
+        <form action="validaUsuario.php" method="post">
             <label for="nombreUsuario">Nombre</label>
             <input type="text" name="nombreUsuario" maxlength="50" required>
 
