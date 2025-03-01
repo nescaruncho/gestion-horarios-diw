@@ -30,69 +30,107 @@ require_once "conexion.php";
 </head>
 <body>
     <nav class="navbar">
-        <?php echo "<p>" . $_SESSION['usuario_nome']." (".$_SESSION['usuario_rol'].")" . "</p>"; ?>
+        <?php
+        $pdoStatement = $pdo->prepare("SELECT name, lastname FROM usuario WHERE id_user = ?");
+        $pdoStatement->bindParam(1, $_SESSION['usuario_id']);
+        $pdoStatement->execute();
+        $usuario = $pdoStatement->fetch();
+        echo "<p>" . $usuario['name'] . " " . $usuario['lastname'] . " (" . $_SESSION['usuario_rol'] . ")" . "</p>";
+        ?>
         <a href="logout.php">Logout</a>
     </nav>
+    <h2>Ciclos</h2>
+    <form method="post">
+        <button type="submit" formaction="matriculaCiclo.php">Matricularse</button>
+    </form>
     <table class="product-table">
         <thead>
             <tr>
-                <th>Imaxe</th>
+                <th>Código</th>
                 <th>Nome</th>
-                <th>Descrición</th>
-                <th>Familia</th>
-                <th>Comentarios</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <?php
-            $pdoStatement = $pdo->prepare("SELECT * FROM produto");
+            $pdoStatement = $pdo->prepare("SELECT * FROM ciclo");
             $pdoStatement->execute();
             $filas = $pdoStatement->fetchAll();
 
-            foreach ($filas as $produto) {
-                $pdoStatement2 = $pdo->prepare("SELECT * FROM comentarios WHERE idProduto=?");
-                $pdoStatement2->bindParam(1, $produto['idProduto']);
+            foreach ($filas as $ciclo) {
+                $pdoStatement2 = $pdo->prepare("SELECT * FROM ciclo WHERE id_ciclo=?");
+                $pdoStatement2->bindParam(1, $ciclo['id_ciclo']);
                 $pdoStatement2->execute();
                 $filas2 = $pdoStatement2->fetchAll();
 
                 echo "<tr>";
-                echo "<td><img src='".$produto['imaxe']."' alt='imaxeproducto' width='100'></td>";
-                echo "<td>".$produto['nome']."</td>";
-                echo "<td>".$produto['descricion']."</td>";
-                echo "<td>".$produto['familia']."</td>";
+                echo "<td>".$ciclo['codigo']."</td>";
+                echo "<td>".$ciclo['name']."</td>";
                 echo "<td>";
-
-                switch ($_SESSION['usuario_rol']) {
-                    case 'usuario':
-                        foreach ($filas2 as $comentario) {
-                            if ($comentario['moderado'] == 'si') {
-                                echo "<p class='comment'>".$comentario['comentario']." <span class='date'>(".$comentario['dataCreacion'].")</span></p>";
-                            }
-                        }
-                        echo "<form action='comenta.php' method='post'>";
-                        echo "<input type='hidden' name='idProduto' value='".$produto['idProduto']."'>";
-                        echo "<input type='text' name='comentario' required><br>";
-                        echo "<button type='submit'>Añadir comentario</button>";
-                        echo "</form>";
-                        break;
-                    
-                    case 'moderador':
-                        foreach ($filas2 as $comentario) {
-                            if ($comentario['moderado'] == 'non') {
-                                echo "<p class='comment'>".$comentario['comentario']." <span class='date'>(".$comentario['dataCreacion'].")</span></p>";
-                                echo "<form action='moderarComentario.php' method='post'>";
-                                echo "<input type='hidden' name='idComentario' value='".$comentario['idComentario']."'>";
-                                echo "<button type='submit'>Moderar comentario</button>";
-                                echo "</form>";
-                            }
-                        }
-                        break;
+                // Si el alumno está matriculado en el ciclo, mostrar el botón de desmatricularse
+                $pdoStatement3 = $pdo->prepare("SELECT * FROM usuario_ciclo WHERE id_user = ? AND id_ciclo = ?");
+                $pdoStatement3->bindParam(1, $_SESSION['usuario_id']);
+                $pdoStatement3->bindParam(2, $ciclo['id_ciclo']);
+                $pdoStatement3->execute();
+                $matriculado = $pdoStatement3->fetch();
+                if ($matriculado) {
+                    echo "<button type='submit' formaction='desmatriculaCiclo.php'>Desmatricularse</button>";
                 }
+                echo "</form>";
                 echo "</td>";
                 echo "</tr>";
             }
             ?>
         </tbody>
     </table>
+    <?php
+    $pdoStatement = $pdo->prepare("SELECT * FROM usuario_ciclo WHERE id_user = ?");
+    $pdoStatement->bindParam(1, $_SESSION['usuario_id']);
+    $pdoStatement->execute();
+    $matriculas = $pdoStatement->fetchAll();
+
+    if (!empty($matriculas)) {
+        echo "<h2>Módulos</h2>";
+        echo "<form method='post'>";
+        echo "<button type='submit' formaction='matriculaModulo.php'>Matricularse</button>";
+        echo "</form>";
+        echo '<table class="product-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Ciclo</th>
+                    <th>Curso</th>
+                    <th>Horas</th>
+                    <th>Profesor</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        foreach ($matriculas as $matricula) {
+            $pdoStatement2 = $pdo->prepare("SELECT m.name AS modulo_name, c.name AS ciclo_name, p.name AS profesor_name, p.lastname AS profesor_lastname, m.curso, m.horas_totales 
+                                            FROM modulo m 
+                                            JOIN ciclo_tiene_modulo ctm ON m.id_modulo = ctm.id_modulo 
+                                            JOIN ciclo c ON ctm.id_ciclo = c.id_ciclo 
+                                            LEFT JOIN profesor p ON ctm.id_profesor = p.id_profesor
+                                            WHERE c.id_ciclo = ?");
+            $pdoStatement2->bindParam(1, $matricula['id_ciclo']);
+            $pdoStatement2->execute();
+            $modulos = $pdoStatement2->fetchAll();
+
+            foreach ($modulos as $modulo) {
+                echo "<tr>";
+                echo "<td>".$modulo['modulo_name']."</td>";
+                echo "<td>".$modulo['ciclo_name']."</td>";
+                echo "<td>".$modulo['curso']."</td>";
+                echo "<td>".$modulo['horas_totales']."</td>";
+                echo "<td>".$modulo['profesor_name'].' '.$modulo['profesor_lastname']."</td>";
+                echo "</tr>";
+            }
+        }
+
+        echo '</tbody>
+        </table>';
+    }
+    ?>
 </body>
 </html>
