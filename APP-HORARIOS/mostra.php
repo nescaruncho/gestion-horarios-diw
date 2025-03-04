@@ -17,6 +17,10 @@ if ($_SESSION['usuario_rol'] == 'administrador') {
     exit();
 }
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 require_once "conexion.php";
 ?>
 
@@ -53,6 +57,7 @@ require_once "conexion.php";
         </thead>
         <tbody>
             <?php
+
             $pdoStatement = $pdo->prepare("SELECT * FROM ciclo");
             $pdoStatement->execute();
             $filas = $pdoStatement->fetchAll();
@@ -62,23 +67,22 @@ require_once "conexion.php";
                 echo "<td>".$ciclo['codigo']."</td>";
                 echo "<td>".$ciclo['name']."</td>";
                 echo "<td>";
-                echo "<form method='post'>";
-                // Si el alumno está matriculado en algún módulo del ciclo
-                $pdoStatement3 = $pdo->prepare("
-                    SELECT DISTINCT um.id_user 
-                    FROM user_modulo um
-                    JOIN ciclo_tiene_modulo ctm ON um.id_modulo = ctm.id_modulo
-                    WHERE um.id_user = ? AND ctm.id_ciclo = ?");
-                $pdoStatement3->bindParam(1, $_SESSION['usuario_id']);
-                $pdoStatement3->bindParam(2, $ciclo['id_ciclo']);
-                $pdoStatement3->execute();
-                $matriculado = $pdoStatement3->fetch();
+                $pdoStatement2 = $pdo->prepare("
+                    SELECT id_user 
+                    FROM usuario_ciclo
+                    WHERE id_user = ? AND id_ciclo = ?");
+                $pdoStatement2->bindParam(1, $_SESSION['usuario_id']);
+                $pdoStatement2->bindParam(2, $ciclo['id_ciclo']);
+                $pdoStatement2->execute();
+                $matriculado = $pdoStatement2->fetch();
                 
                 if ($matriculado) {
-                    echo "<input type='hidden' name='ciclo_id' value='".$ciclo['id_ciclo']."'>";
+                    echo "<form method='post'>";
+                    echo "<input type='hidden' name='ciclo' value='".$ciclo['id_ciclo']."'>";
+                    echo "<input type='hidden' name='csrf_token' value='".$_SESSION['csrf_token']."'>";
                     echo "<button type='submit' formaction='desmatriculaCiclo.php'>Desmatricularse</button>";
+                    echo "</form>";
                 }
-                echo "</form>";
                 echo "</td>";
                 echo "</tr>";
             }
@@ -87,55 +91,71 @@ require_once "conexion.php";
     </table>
 
     <?php
-    // Consulta para obtener los módulos del usuario
-    $pdoStatement = $pdo->prepare("
-        SELECT DISTINCT m.*, c.name AS ciclo_name, p.name AS profesor_name, p.lastname AS profesor_lastname
-        FROM modulo m
-        JOIN ciclo_tiene_modulo ctm ON m.id_modulo = ctm.id_modulo
-        JOIN ciclo c ON ctm.id_ciclo = c.id_ciclo
-        JOIN user_modulo um ON m.id_modulo = um.id_modulo
-        LEFT JOIN profesor p ON ctm.id_profesor = p.id_profesor
-        WHERE um.id_user = ?
-        ORDER BY c.name, m.curso, m.name
-    ");
-    
-    $pdoStatement->bindParam(1, $_SESSION['usuario_id']);
-    $pdoStatement->execute();
-    $modulos = $pdoStatement->fetchAll();
+        // Obtener el ciclo en el que está matriculado el usuario
+        $pdoStatement = $pdo->prepare("
+            SELECT c.* 
+            FROM ciclo c
+            INNER JOIN usuario_ciclo uc ON c.id_ciclo = uc.id_ciclo
+            WHERE uc.id_user = ?
+        ");
+        $pdoStatement->bindParam(1, $_SESSION['usuario_id']);
+        $pdoStatement->execute();
+        $cicloMatriculado = $pdoStatement->fetch();
 
-    if (!empty($modulos)) {
-        echo "<h2>Módulos</h2>";
-        echo '<table class="product-table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ciclo</th>
-                    <th>Curso</th>
-                    <th>Horas</th>
-                    <th>Profesor</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>';
-
-        foreach ($modulos as $modulo) {
-            echo "<tr>";
-            echo "<td>".$modulo['name']."</td>";
-            echo "<td>".$modulo['ciclo_name']."</td>";
-            echo "<td>".$modulo['curso']."</td>";
-            echo "<td>".$modulo['horas_totales']."</td>";
-            echo "<td>".($modulo['profesor_name'] ? $modulo['profesor_name'].' '.$modulo['profesor_lastname'] : 'Sin asignar')."</td>";
-            echo "<td>";
+        if ($cicloMatriculado) {
+            echo "<h3>Módulos de " . htmlspecialchars($cicloMatriculado['name']) . "</h3>";
+            
+            // Botón para matricularse en módulos
             echo "<form method='post'>";
-            echo "<input type='hidden' name='modulo_id' value='".$modulo['id_modulo']."'>";
-            echo "<button type='submit' formaction='desmatriculaModulo.php'>Desmatricularse</button>";
+            echo "<button type='submit' formaction='matriculaModulo.php'>Matricularse en módulos</button>";
             echo "</form>";
-            echo "</td>";
-            echo "</tr>";
-        }
 
-        echo '</tbody></table>';
-    }
-    ?>
+            // Tabla de módulos
+            echo "<table class='product-table'>";
+            echo "<thead><tr><th>Nombre</th><th>Curso</th><th>Horas totales</th><th></th></tr></thead>";
+            echo "<tbody>";
+
+            // Obtener módulos del ciclo
+            $pdoStatement = $pdo->prepare("
+                SELECT m.* 
+                FROM modulo m
+                INNER JOIN ciclo_tiene_modulo ctm ON m.id_modulo = ctm.id_modulo
+                WHERE ctm.id_ciclo = ?
+            ");
+            $pdoStatement->bindParam(1, $cicloMatriculado['id_ciclo']);
+            $pdoStatement->execute();
+            $modulos = $pdoStatement->fetchAll();
+
+            foreach ($modulos as $modulo) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($modulo['name']) . "</td>";
+                echo "<td>" . htmlspecialchars($modulo['curso']) . "</td>";
+                echo "<td>" . htmlspecialchars($modulo['horas_totales']) . "</td>";
+                echo "<td>";
+                
+                // Verificar si el usuario está matriculado en este módulo
+                $pdoStatement2 = $pdo->prepare("
+                    SELECT id_user_modulo 
+                    FROM user_modulo 
+                    WHERE id_user = ? AND id_modulo = ?
+                ");
+                $pdoStatement2->bindParam(1, $_SESSION['usuario_id']);
+                $pdoStatement2->bindParam(2, $modulo['id_modulo']);
+                $pdoStatement2->execute();
+                $matriculadoModulo = $pdoStatement2->fetch();
+
+                if ($matriculadoModulo) {
+                    echo "<form method='post'>";
+                    echo "<input type='hidden' name='modulo' value='" . $modulo['id_modulo'] . "'>";
+                    echo "<input type='hidden' name='csrf_token' value='" . $_SESSION['csrf_token'] . "'>";
+                    echo "<button type='submit' formaction='desmatriculaModulo.php'>Desmatricularse</button>";
+                    echo "</form>";
+                }
+                echo "</td>";
+                echo "</tr>";
+            }
+            echo "</tbody></table>";
+        }
+        ?>
 </body>
 </html>
