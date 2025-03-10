@@ -32,6 +32,17 @@ if (empty($_SESSION['csrf_token'])) {
     <title>Matrícula</title>
 </head>
 <body>
+    <nav class="navbar">
+        <?php
+        $pdoStatement = $pdo->prepare("SELECT name, lastname FROM usuario WHERE id_user = ?");
+        $pdoStatement->bindParam(1, $_SESSION['usuario_id']);
+        $pdoStatement->execute();
+        $usuario = $pdoStatement->fetch();
+        echo "<p>" . $usuario['name'] . " " . $usuario['lastname'] . " (" . $_SESSION['usuario_rol'] . ")" . "</p>";
+        ?>
+        <a href="logout.php">Logout</a>
+    </nav>
+
     <div class="form-container">
         <form action="validaMatriculaCiclo.php" method="post" id="matriculaForm">
             <div class="form-group">

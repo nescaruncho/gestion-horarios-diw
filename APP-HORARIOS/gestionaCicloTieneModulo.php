@@ -70,7 +70,7 @@ try {
     <?php
 
 
-} catch (Exception $e) {
+} catch (PDOException $e) {
     $errorInfo = $e->errorInfo;
     $mensaje = "Error: " . $e->getMessage();
     

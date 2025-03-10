@@ -10,15 +10,16 @@ require_once "conexion.php";
 try {
     switch ($_POST["boton"]) {
         case 'editar':
-            $pdoStatement=$pdo->prepare("UPDATE ciclo SET codigo=?, name=? WHERE id_ciclo=?");
-            $pdoStatement->bindParam(1, $_POST['codigoCiclo']);
-            $pdoStatement->bindParam(2, $_POST["nombreCiclo"]);
-            $pdoStatement->bindParam(3, $_POST['idCiclo']);
+            $pdoStatement=$pdo->prepare("UPDATE profesor SET name=?, lastname=?, email=? WHERE id_profesor=?");
+            $pdoStatement->bindParam(1, $_POST['nombreProfesor']);
+            $pdoStatement->bindParam(2, $_POST['apellidoProfesor']);
+            $pdoStatement->bindParam(3, $_POST['emailProfesor']);
+            $pdoStatement->bindParam(4, $_POST['idProfesor']);
             break;
     
         case 'eliminar':
-            $pdoStatement=$pdo->prepare("DELETE FROM ciclo WHERE id_ciclo=?;");
-            $pdoStatement->bindParam(1, $_POST['idCiclo']);
+            $pdoStatement=$pdo->prepare("DELETE FROM profesor WHERE id_profesor=?;");
+            $pdoStatement->bindParam(1, $_POST['idProfesor']);
             break;
         
         default:

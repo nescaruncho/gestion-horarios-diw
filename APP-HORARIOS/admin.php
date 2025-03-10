@@ -49,24 +49,24 @@ require_once "conexion.php";
                 $pdoStatement->execute();
                 $filas = $pdoStatement->fetchAll();
 
-                foreach ($filas as $usuario) {
+                foreach ($filas as $alumno) {
                     echo "<tr>";
-                    echo "<td>".$usuario['name']."</td>";
-                    echo "<td>".$usuario['email']."</td>";
-                    echo "<td>".$usuario['dni']."</td>";
-                    echo "<td>".$usuario['login']."</td>";
+                    echo "<td>".$alumno['name']."</td>";
+                    echo "<td>".$alumno['email']."</td>";
+                    echo "<td>".$alumno['dni']."</td>";
+                    echo "<td>".$alumno['login']."</td>";
                     echo "<td>";
                         echo "<form action='editaUsuario.php' method='post'>";
-                        echo "<input type='hidden' name='idUsuario' value='".$usuario['id_user']."'>";
-                        echo "<input type='hidden' name='nombreUsuario' value='".$usuario['name']."'>";
-                        echo "<input type='hidden' name='apellidoUsuario' value='".$usuario['lastname']."'>";
-                        echo "<input type='hidden' name='emailUsuario' value='".$usuario['email']."'>";
-                        echo "<input type='hidden' name='dniUsuario' value='".$usuario['dni']."'>";
-                        echo "<input type='hidden' name='loginUsuario' value='".$usuario['login']."'>";
+                        echo "<input type='hidden' name='idUsuario' value='".$alumno['id_user']."'>";
+                        echo "<input type='hidden' name='nombreUsuario' value='".$alumno['name']."'>";
+                        echo "<input type='hidden' name='apellidoUsuario' value='".$alumno['lastname']."'>";
+                        echo "<input type='hidden' name='emailUsuario' value='".$alumno['email']."'>";
+                        echo "<input type='hidden' name='dniUsuario' value='".$alumno['dni']."'>";
+                        echo "<input type='hidden' name='loginUsuario' value='".$alumno['login']."'>";
                         echo "<button type='submit'>Editar</button>";
                         echo "</form>";
                         echo "<form action='gestionaUsuario.php' method='post'>";
-                        echo "<input type='hidden' name='idUsuario' value='".$usuario['id_user']."'>";
+                        echo "<input type='hidden' name='idUsuario' value='".$alumno['id_user']."'>";
                         echo "<button type='submit' name='boton' value='eliminar'>Eliminar</button>";
                         echo "</form>";
                     echo "</td>";
@@ -181,6 +181,53 @@ require_once "conexion.php";
                         echo "</form>";
                         echo "<form action='gestionaModulo.php' method='post'>";
                         echo "<input type='hidden' name='idModulo' value='".$modulo['id_modulo']."'>";
+                        echo "<button type='submit' name='boton' value='eliminar'>Eliminar</button>";
+                        echo "</form>";
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+
+    <br><hr>
+
+    <div>
+        <h2>Profesores</h2>
+        <form action="creaProfesor.php" method="post">
+            <button type="submit">Crear nuevo</button>
+        </form>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Administrar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $pdoStatement = $pdo->prepare("SELECT * FROM profesor");
+                $pdoStatement->execute();
+                $filas = $pdoStatement->fetchAll();
+
+                foreach ($filas as $profesor) {
+                    echo "<tr>";
+                    echo "<td>".$profesor['name']."</td>";
+                    echo "<td>".$profesor['lastname']."</td>";
+                    echo "<td>".$profesor['email']."</td>";
+                    echo "<td>";
+                        echo "<form action='editaProfesor.php' method='post'>";
+                        echo "<input type='hidden' name='idProfesor' value='".$profesor['id_profesor']."'>";
+                        echo "<input type='hidden' name='nombreProfesor' value='".$profesor['name']."'>";
+                        echo "<input type='hidden' name='apellidoProfesor' value='".$profesor['lastname']."'>";
+                        echo "<input type='hidden' name='emailProfesor' value='".$profesor['email']."'>";
+                        echo "<button type='submit'>Editar</button>";
+                        echo "</form>";
+                        echo "<form action='gestionaProfesor.php' method='post'>";
+                        echo "<input type='hidden' name='idProfesor' value='".$profesor['id_profesor']."'>";
                         echo "<button type='submit' name='boton' value='eliminar'>Eliminar</button>";
                         echo "</form>";
                     echo "</td>";

@@ -26,7 +26,7 @@ try {
     header("Location: admin.php");
     exit();
 
-} catch (Exception $e) {
+} catch (PDOException $e) {
     $errorInfo = $e->errorInfo;
     $mensaje = "Error: " . $e->getMessage();
 

@@ -20,6 +20,11 @@ if (empty($_SESSION['csrf_token'])) {
     <title>Rexistro de usuarios</title>
 </head>
 <body>
+    <nav class="navbar">
+        <?php echo "<p>" . $_SESSION['usuario_nome']." (".$_SESSION['usuario_rol'].")" . "</p>"; ?>
+        <a href="logout.php">Logout</a>
+    </nav>
+
     <div class="form-container">
         <form action="validaUsuario.php" method="post">
             <label for="nombreUsuario">Nombre</label>

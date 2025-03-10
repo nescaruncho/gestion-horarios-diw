@@ -36,7 +36,7 @@ try {
     header("Location: admin.php");
     exit();
 
-} catch (Exception $e) {
+} catch (PDOException $e) {
     $errorInfo = $e->errorInfo;
     if (isset($errorInfo[1]) && $errorInfo[1] == 1062) {
         $mensaje = "Error: El nombre de usuario o el email ya están en uso.";

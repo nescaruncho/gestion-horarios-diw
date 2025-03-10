@@ -20,6 +20,10 @@ if (empty($_SESSION['csrf_token'])) {
     <title>Nuevo modulo</title>
 </head>
 <body>
+    <nav class="navbar">
+        <?php echo "<p>" . $_SESSION['usuario_nome']." (".$_SESSION['usuario_rol'].")" . "</p>"; ?>
+        <a href="logout.php">Logout</a>
+    </nav>    
     <div class="form-container">
         <form action="validaModulo.php" method="post">
             <label for="nombreModulo">Nombre</label>
