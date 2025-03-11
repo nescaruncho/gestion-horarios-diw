@@ -237,6 +237,89 @@ require_once "conexion.php";
             </tbody>
         </table>
     </div>
+
+    <br><hr>
+
+    <div>
+        <h2>Sesiones</h2>
+        <?php
+            $pdoStatement = $pdo->prepare("SELECT * FROM ciclo");
+            $pdoStatement->execute();
+            $filas = $pdoStatement->fetchAll();
+
+            foreach ($filas as $ciclo) {
+                echo "<h3>".$ciclo['name']."</h3>";
+
+                ?>
+                <table class="product-table">
+                    <thead>
+                        <tr>
+                            <th>Módulo</th>
+                            <th>Profesor</th>
+                            <th>Sesiones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $pdoStatement2 = $pdo->prepare("SELECT 
+                                                                    M.id_modulo,
+                                                                    M.name AS nombre_modulo,
+                                                                    P.id_profesor,
+                                                                    P.name AS nombre_profesor,
+                                                                    P.lastname AS apellido_profesor,
+                                                                    CTM.id_ciclo_modulo
+                                                                FROM CICLO_TIENE_MODULO CTM
+                                                                JOIN MODULO M ON CTM.id_modulo = M.id_modulo
+                                                                LEFT JOIN PROFESOR P ON CTM.id_profesor = P.id_profesor
+                                                                WHERE CTM.id_ciclo = ?;
+                                                                ");
+                        $pdoStatement2->bindParam(1, $ciclo['id_ciclo']);
+                        $pdoStatement2->execute();
+                        $filas2 = $pdoStatement2->fetchAll();
+                        foreach ($filas2 as $data) {
+                            echo "<tr>";
+                            echo "<td>".$data['nombre_modulo']."</td>";
+                            echo "<td>".$data['nombre_profesor']." ".$data['apellido_profesor']."</td>";
+                            echo "<td>";
+                            $pdoStatement3 = $pdo->prepare("SELECT 
+                                                                        S.id_sesion,
+                                                                        S.id_ciclo_modulo,
+                                                                        S.dia_semana,
+                                                                        S.hora_inicio,
+                                                                        S.hora_fin,
+                                                                        S.aula
+                                                                    FROM SESION S
+                                                                    JOIN CICLO_TIENE_MODULO CTM ON S.id_ciclo_modulo = CTM.id_ciclo_modulo
+                                                                    WHERE CTM.id_ciclo_modulo = ?;
+                                                                ");
+                            $pdoStatement3->bindParam(1, $data['id_ciclo_modulo']);
+                            $pdoStatement3->execute();
+                            $filas3 = $pdoStatement3->fetchAll();
+                            foreach ($filas3 as $sesion) {
+                                echo "<form action='gestionaSesion.php' method='post'>";
+                                echo $sesion['dia_semana'].": ".$sesion['hora_inicio']." - ".$sesion['hora_fin']." | Aula: ".$sesion['aula'];
+                                echo "<input type='hidden' name='idSesion' value='".$sesion['id_sesion']."'>";
+                                echo " "."<button type='submit' name='boton' value='eliminar'>Eliminar</button>";
+                                echo "</form>";
+                                echo "<br>";
+                            }
+                                echo "<form action='creaSesion.php' method='post'>";
+                                echo "<input type='hidden' name='idCicloModulo' value='".$data['id_ciclo_modulo']."'>";
+                                echo "<button type='submit' name='boton' value='crear'>Crear nueva</button>";
+                                echo "</form>";
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+
+                <?php
+
+                echo "<br>";
+            }
+        ?>
+    </div>
     
 </body>
 </html>

@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 require_once "conexion.php";
 
 try {
-    $pdoStatement=$pdo->prepare("SELECT C.id_ciclo, C.name AS ciclo_name
+    $pdoStatement=$pdo->prepare("SELECT C.id_ciclo AS ciclo_id, C.name AS ciclo_name
                                         FROM CICLO C
                                         WHERE NOT EXISTS (
                                             SELECT 1
@@ -40,7 +40,7 @@ try {
         </nav>
 
         <div class="form-container">
-            <form action="creaCicloTieneModulo.php" method="post">
+            <form action="validaCicloTieneModulo.php" method="post">
                 <label for="idCiclo">Ciclo</label>
                 <select name="idCiclo">
                     <?php

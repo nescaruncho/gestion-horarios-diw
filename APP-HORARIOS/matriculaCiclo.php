@@ -21,6 +21,8 @@ if (!empty($_SESSION['error'])) {
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+
+require_once "conexion.php";
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +52,6 @@ if (empty($_SESSION['csrf_token'])) {
 
 
                     <?php
-                    require_once "conexion.php";
 
                     $pdoStatement2 = $pdo->prepare("SELECT id_ciclo FROM usuario_ciclo WHERE id_user = ?");
                     $pdoStatement2->bindParam(1, $_SESSION['usuario_id']);
