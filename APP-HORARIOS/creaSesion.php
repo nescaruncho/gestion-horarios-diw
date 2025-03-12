@@ -28,10 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     <div class="form-container">
         <form action="validaSesion.php" method="post">
             <label for="horaInicio">Hora de inicio</label>
-            <input type="time" name="horaInicio" required>
-
-            <label for="horaFin">Hora de fin</label>
-            <input type="time" name="horaFin" required>
+            <select name="horaInicio" required>
+                <option value="08:45">08:45</option>
+                <option value="09:35">09:35</option>
+                <option value="10:25">10:25</option>
+                <option value="11:15">11:15</option>
+                <option value="12:05">12:05</option>
+                <option value="12:55">12:55</option>
+                <option value="13:45">13:45</option>
+            </select>
 
             <label for="diaSemana">Día de la semana</label>
             <select name="diaSemana">
@@ -46,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             <input type="text" name="aula" maxlength="25" required>
 
             <input type="hidden" name="idCicloModulo" value="<?=$_POST["idCicloModulo"]?>">
+            <input type="hidden" name="idCiclo" value="<?=$_POST["idCiclo"]?>">
 
             <button type="submit">Enviar</button>
         </form>
