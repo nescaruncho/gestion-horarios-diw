@@ -30,7 +30,7 @@ require_once "conexion.php";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <title>Mostra</title>
+    <title>Panel de alumno</title>
 </head>
 <body>
     <nav class="navbar">
@@ -46,6 +46,9 @@ require_once "conexion.php";
     <h2>Ciclos</h2>
     <form method="post">
         <button type="submit" formaction="matriculaCiclo.php">Matricularse</button>
+    </form>
+    <form action="verHorario.php" method="post">
+        <button type="submit">Ver horario</button>
     </form>
     <table class="product-table">
         <thead>
