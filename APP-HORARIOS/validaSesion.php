@@ -16,6 +16,12 @@ try {
     $pdoStatement->execute([$_POST["idCiclo"], $_POST["diaSemana"], $_POST["horaInicio"]]);
     $existe = $pdoStatement->fetchColumn();
 
+    // Segunda verificación: comprobar si el aula está ocupada en ese día y hora
+    $pdoStatement = $pdo->prepare("SELECT COUNT(*) FROM SESION 
+                                   WHERE aula = ? AND dia_semana = ? AND hora_inicio = ?");
+    $pdoStatement->execute([$_POST["aula"], $_POST["diaSemana"], $_POST["horaInicio"]]);
+    $aulaOcupada = $pdoStatement->fetchColumn();
+
 } catch (PDOException $e) {
     $errorInfo = $e->errorInfo;
     
@@ -28,6 +34,13 @@ try {
 
 if ($existe > 0) {
     $mensaje = "Error: Ya existe una sesión con esa hora de inicio en ese día para este ciclo.";
+    $_SESSION['error'] = $mensaje;
+    header("Location: admin.php");
+    exit();
+}
+
+if ($aulaOcupada > 0) {
+    $mensaje = "Error: El aula ya está ocupada en ese día y hora.";
     $_SESSION['error'] = $mensaje;
     header("Location: admin.php");
     exit();
