@@ -79,9 +79,9 @@ foreach ($horas as $hora) {
             FROM SESION S
             JOIN CICLO_TIENE_MODULO CTM ON S.id_ciclo_modulo = CTM.id_ciclo_modulo
             JOIN MODULO M ON CTM.id_modulo = M.id_modulo
-            WHERE CTM.id_ciclo = ? AND S.dia_semana = ? AND S.hora_inicio = ?
+            WHERE CTM.id_ciclo = ? AND S.dia_semana = ? AND S.hora_inicio = ? AND M.curso = ?
         ");
-        $pdoStatement->execute([$idCiclo, $dia, $hora]);
+        $pdoStatement->execute([$idCiclo, $dia, $hora, $_SESSION['usuario_curso']]);
         $modulo = $pdoStatement->fetchColumn(); 
 
         echo "<td>".($modulo ?: "")."</td>";
@@ -110,9 +110,9 @@ $pdoStatement = $pdo->prepare("
     FROM SESION S
     JOIN CICLO_TIENE_MODULO CTM ON S.id_ciclo_modulo = CTM.id_ciclo_modulo
     JOIN MODULO M ON CTM.id_modulo = M.id_modulo
-    WHERE CTM.id_ciclo = ?
+    WHERE CTM.id_ciclo = ? AND M.curso = ?
 ");
-$pdoStatement->execute([$idCiclo]);
+$pdoStatement->execute([$idCiclo, $_SESSION['usuario_curso']]);
 $modulos = $pdoStatement->fetchAll(PDO::FETCH_COLUMN);
 
 // Definir paleta de colores pastel
@@ -141,9 +141,9 @@ foreach ($horas as $hora) {
             FROM SESION S
             JOIN CICLO_TIENE_MODULO CTM ON S.id_ciclo_modulo = CTM.id_ciclo_modulo
             JOIN MODULO M ON CTM.id_modulo = M.id_modulo
-            WHERE CTM.id_ciclo = ? AND S.dia_semana = ? AND S.hora_inicio = ?
+            WHERE CTM.id_ciclo = ? AND S.dia_semana = ? AND S.hora_inicio = ? AND M.curso = ?
         ");
-        $pdoStatement->execute([$idCiclo, $dia, $hora]);
+        $pdoStatement->execute([$idCiclo, $dia, $hora, $_SESSION['usuario_curso']]);
         $modulo = $pdoStatement->fetchColumn();
         
         if ($modulo) {
