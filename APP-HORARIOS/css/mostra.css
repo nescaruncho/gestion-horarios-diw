@@ -1,0 +1,161 @@
+@import url(estiloGeneral.css);
+@import url(navBar.css);
+@import url(scroll.css);
+@import url(mensajeError.css);
+@import url(barraLateral.css);
+
+.navbar .opciones-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar .opcion {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.navbar .opcion:hover {
+    color:#c4d9e4;
+}
+
+.navbar .divisor {
+    width: 1px;
+    height: 20px;
+    background-color: #ffffff;
+}
+
+.tabla-container {
+    padding: 2rem 0rem !important;
+    background-color: #ffffff;
+    border-radius: 2px;
+
+    height: 81vh;
+    padding: 2rem;
+    transform: translateX(5%);
+    width: 76vw;
+    transition: width 0.5s ease-in-out;
+    position: relative; 
+    top: 9vh;
+}
+
+.tabla-container.collapsed {
+    width: 85vw;
+    transform: translateX(5%);
+}
+
+.divTabla {
+    width: -webkit-fill-available;
+    opacity: 0; 
+    transition: opacity 0.5s ease-out; 
+}
+
+.product-table{    
+    max-height: 70vh;
+    overflow-y: auto; 
+}
+.tabla-container h2 {
+    color: #488cae;
+    margin: 0rem;
+    margin-bottom: 1rem;
+}
+
+.tabla-container table {
+    width: 100%;
+    border-collapse: collapse;
+    
+
+}
+
+.tabla-container th,
+.tabla-container td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla-container th {
+    background-color: #488cae;
+    color: #ffffff;
+}
+.tabla-container th:first-of-type {
+    border-top-left-radius: 3px;
+}
+.tabla-container th:last-of-type {
+    border-top-right-radius: 3px;
+}
+.tabla-container tr:nth-child(even) {
+    background-color: rgb(226, 226, 226); 
+}
+
+.tabla-container tr:nth-child(odd) {
+    background-color: #c4d9e4;; 
+}
+
+
+
+
+
+
+button {
+    padding: 0.4rem 0.9rem; /* Espaciado interno más pequeño */
+    color: #ffffff; /* Texto blanco */
+    font-weight: bold; /* Texto en negrita */
+    transition: all 0.3s ease; /* Transición suave */
+    margin-bottom: 0.25rem; /* Margen entre botones */
+    min-width: 80px; /* Ancho mínimo para consistencia */
+}
+
+
+button.eliminar {
+    background-color: #f4791b; /* Fondo naranja */
+}
+
+
+button.editar {
+    background-color: #2bc187; /* Fondo verde */
+}
+
+
+button.crear {
+    background-color: #488cae; /* Fondo azul */
+    padding: 0.5rem 1rem; /* Ligeramente más grande que los demás */
+    margin-bottom: 1rem;
+    font-size: 0.9rem; /* Tamaño de fuente ligeramente mayor */
+    min-width: 100px; /* Ancho mínimo mayor para el botón "crear" */
+}
+
+
+button.vincular {
+    background-color: #488cae; /* Fondo azul */
+}
+
+
+
+button:active {
+    transform: scale(0.95); /* Reduce ligeramente el tamaño del botón */
+}
+
+
+
+button.crear:active {
+    transform: scale(0.97); /* Reduce ligeramente el tamaño del botón */
+}
+
+
+
+
+
+
+
+
+
+
+.tabla-visible {
+    opacity: 1; /* Tabla visible */
+}

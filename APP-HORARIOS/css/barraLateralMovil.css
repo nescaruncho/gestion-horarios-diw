@@ -1,0 +1,62 @@
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 50px;
+        left: -100%;
+        width: 100vw !important;
+        height: calc(100vh - 60px);
+        z-index: 999;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 1rem 0;
+        background: #488cae;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .menu {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+    .menu-item:hover {
+        color: #c4d9e4;
+    }
+    
+    .menu-item:hover .icon {
+        color: #c4d9e4;
+    }
+    .menu-item {
+        padding: 1rem;
+        margin-left: 1rem;
+        justify-content: flex-start;
+    }
+
+    .icon {
+        margin: 0 1rem 0 0.5rem;
+        font-size: 1rem;
+    }
+
+    .text {
+        opacity: 1 !important;
+        transform: none !important;
+        margin-left: 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .toggle-btn {
+        position: fixed;
+        right: 0rem;
+        top:4rem;
+        background: #3a6f8a;
+        padding: 0.8rem;
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        z-index: 1001;
+        font-size: 0.8rem;
+    }
+    .tooltip {
+        visibility: hidden;
+    }
+}

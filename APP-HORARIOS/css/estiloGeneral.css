@@ -1,0 +1,18 @@
+body {
+    font-size: 0.8rem;
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+}
+
+button, .volver, input[type="submit"], .logout {
+    border: none; 
+    border-radius: 2px; 
+    cursor: pointer; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+button:hover, .volver:hover, input[type="submit"]:hover, .logout:hover{
+    transform: translateY(-2px);
+}
