@@ -1,4 +1,4 @@
-.navbar {
+/*.navbar {
     position: fixed;
     top: 0;
     left: 0;
@@ -45,7 +45,7 @@ body {
     overflow: hidden;
 }
 
-/* Estilo de las cabeceras */
+
 .product-table thead {
     background-color: #333;
     color: white;
@@ -58,17 +58,17 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-/* Alternar colores en filas */
+
 .product-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* Efecto hover */
+
 .product-table tbody tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Estilos para comentarios */
+
 .comment {
     margin: 5px 0;
     font-size: 14px;
@@ -80,7 +80,7 @@ body {
     color: gray;
 }
 
-/* Contenedor del formulario */
+
 .form-container {
     max-width: 400px;
     background: white;
@@ -90,7 +90,7 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos generales de los labels e inputs */
+
 .form-container input[type="text"],
 .form-container input[type="password"],
 .form-container input[type="email"] {
@@ -102,10 +102,10 @@ body {
     font-size: 16px;
 }
 
-/* Botón de envío */
+
 .form-container button {
     width: 100%;
-    padding: 10px;
+    padding: 0.4rem 0.9rem;
     background-color: #333;
     color: white;
     border: none;
@@ -116,14 +116,14 @@ body {
     transition: background 0.3s ease-in-out;
 }
 
-/* Efecto hover para el botón */
+
 .form-container button:hover {
     background-color: #555;
 }
 
-/* Estilos para mejorar la disposición */
+
 .form-container label {
     font-weight: bold;
     margin-top: 10px;
     display: block;
-}
+}*/

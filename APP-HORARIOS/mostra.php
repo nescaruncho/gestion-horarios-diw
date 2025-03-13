@@ -2,7 +2,7 @@
 session_start();
 
 if (!empty($_SESSION['error'])) {
-    echo "<p style='color:red;'>" . $_SESSION['error'] . "</p>";
+    echo "<div class='mnsjError'>" . $_SESSION['error'] . "</div>";
     unset($_SESSION['error']);
 }
 
@@ -29,7 +29,9 @@ require_once "conexion.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/adminMovil.css">
     <title>Panel de alumno</title>
 </head>
 <body>
@@ -39,59 +41,88 @@ require_once "conexion.php";
         $pdoStatement->bindParam(1, $_SESSION['usuario_id']);
         $pdoStatement->execute();
         $usuario = $pdoStatement->fetch();
-        echo "<p>" . $usuario['name'] . " " . $usuario['lastname'] . " (" . $_SESSION['usuario_rol'] . ")" . "</p>";
+        echo "<p>" . ucfirst($usuario['name']) . " " . ucwords($usuario['lastname']) . "</p>";
         ?>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php" class="logout">Logout</a>
     </nav>
-    <h2>Ciclos</h2>
-    <form method="post">
-        <button type="submit" formaction="matriculaCiclo.php">Matricularse</button>
-    </form>
-    <form action="verHorario.php" method="post">
-        <button type="submit">Ver horario</button>
-    </form>
-    <table class="product-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
 
-            $pdoStatement = $pdo->prepare("SELECT * FROM ciclo");
-            $pdoStatement->execute();
-            $filas = $pdoStatement->fetchAll();
+    <div class="sidebar" id="sidebar">
+        <i class="fas fa-bars toggle-btn" id="toggle-btn"></i>
+        <ul class="menu opciones-container">
+            <li>
+                <a href="#" class="menu-item opcion" data-tabla="ciclos">
+                    <span class="icon"><i class="fas fa-book"></i></span>
+                    <span class="text">Ciclos</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-item opcion" data-tabla="modulos">
+                    <span class="icon"><i class="fas fa-chart-bar"></i></span>
+                    <span class="text">Modulos</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
-            foreach ($filas as $ciclo) {
-                echo "<tr>";
-                echo "<td>".$ciclo['codigo']."</td>";
-                echo "<td>".$ciclo['name']."</td>";
-                echo "<td>";
-                $pdoStatement2 = $pdo->prepare("
-                    SELECT id_user 
-                    FROM usuario_ciclo
-                    WHERE id_user = ? AND id_ciclo = ?");
-                $pdoStatement2->bindParam(1, $_SESSION['usuario_id']);
-                $pdoStatement2->bindParam(2, $ciclo['id_ciclo']);
-                $pdoStatement2->execute();
-                $matriculado = $pdoStatement2->fetch();
-                
-                if ($matriculado) {
-                    echo "<form method='post'>";
-                    echo "<input type='hidden' name='ciclo' value='".$ciclo['id_ciclo']."'>";
-                    echo "<input type='hidden' name='csrf_token' value='".$_SESSION['csrf_token']."'>";
-                    echo "<button type='submit' formaction='desmatriculaCiclo.php'>Desmatricularse</button>";
-                    echo "</form>";
-                }
-                echo "</td>";
-                echo "</tr>";
-            }
-            ?>
-        </tbody>
-    </table>
+
+    <div id="contenedor-tabla" class="tabla-container">
+    </div>
+    
+    <template id="template-ciclos">
+        <div id="ciclos" class="divTabla">
+            <h2>Ciclos</h2>
+            <form method="post">
+                <button type="submit" formaction="matriculaCiclo.php" class="crear">Matricularse</button>
+            </form>
+            <form action="verHorario.php" method="post">
+                <button type="submit" class="vincular">Ver horario</button>
+            </form>
+            <div class="product-table">
+                <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+
+                    $pdoStatement = $pdo->prepare("SELECT * FROM ciclo");
+                    $pdoStatement->execute();
+                    $filas = $pdoStatement->fetchAll();
+
+                    foreach ($filas as $ciclo) {
+                        echo "<tr>";
+                        echo "<td>".$ciclo['codigo']."</td>";
+                        echo "<td>".$ciclo['name']."</td>";
+                        echo "<td>";
+                        $pdoStatement2 = $pdo->prepare("
+                            SELECT id_user 
+                            FROM usuario_ciclo
+                            WHERE id_user = ? AND id_ciclo = ?");
+                        $pdoStatement2->bindParam(1, $_SESSION['usuario_id']);
+                        $pdoStatement2->bindParam(2, $ciclo['id_ciclo']);
+                        $pdoStatement2->execute();
+                        $matriculado = $pdoStatement2->fetch();
+                        
+                        if ($matriculado) {
+                            echo "<form method='post'>";
+                            echo "<input type='hidden' name='ciclo' value='".$ciclo['id_ciclo']."'>";
+                            echo "<input type='hidden' name='csrf_token' value='".$_SESSION['csrf_token']."'>";
+                            echo "<button type='submit' class='eliminar' formaction='desmatriculaCiclo.php'>Desmatricularse</button>";
+                            echo "</form>";
+                        }
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                </tbody>
+                </table>
+            </div>            
+        </div>
+    </template>
 
     <?php
         // Obtener el ciclo en el que está matriculado el usuario
@@ -106,15 +137,18 @@ require_once "conexion.php";
         $cicloMatriculado = $pdoStatement->fetch();
 
         if ($cicloMatriculado) {
-            echo "<h3>Módulos de " . htmlspecialchars($cicloMatriculado['name']) . "</h3>";
+            echo "<template id='template-modulos'>";
+            echo "<div id='modulos' class='divTabla'>";
+            echo "<h2>Módulos de " . htmlspecialchars($cicloMatriculado['name']) . "</h2>";
             
             // Botón para matricularse en módulos
             echo "<form method='post'>";
-            echo "<button type='submit' formaction='matriculaModulo.php'>Matricularse en módulos</button>";
+            echo "<button type='submit' class='crear' formaction='matriculaModulo.php'>Matricularse en módulos</button>";
             echo "</form>";
 
             // Tabla de módulos
-            echo "<table class='product-table'>";
+            echo "<div class='product-table'>";
+            echo "<table>";
             echo "<thead><tr><th>Nombre</th><th>Curso</th><th>Horas totales</th><th></th></tr></thead>";
             echo "<tbody>";
 
@@ -151,14 +185,16 @@ require_once "conexion.php";
                     echo "<form method='post'>";
                     echo "<input type='hidden' name='modulo' value='" . $modulo['id_modulo'] . "'>";
                     echo "<input type='hidden' name='csrf_token' value='" . $_SESSION['csrf_token'] . "'>";
-                    echo "<button type='submit' formaction='desmatriculaModulo.php'>Desmatricularse</button>";
+                    echo "<button type='submit' class='eliminar' formaction='desmatriculaModulo.php'>Desmatricularse</button>";
                     echo "</form>";
                 }
                 echo "</td>";
                 echo "</tr>";
             }
-            echo "</tbody></table>";
+            echo "</tbody></table></div></div></template>";
         }
         ?>
+    <script src="js/tablas.js"></script>
+    <script src="js/barraLateral.js"></script>
 </body>
 </html>

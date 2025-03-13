@@ -2,7 +2,7 @@
 session_start();
 
 if (!empty($_SESSION['error'])) {
-    echo "<p style='color:red;'>" . $_SESSION['error'] . "</p>";
+    echo "<div class='mnsjError'>" . $_SESSION['error'] . "</div>";
     unset($_SESSION['error']);
 }
 
@@ -22,7 +22,33 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 require_once "conexion.php";
-
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/verHorario.css">
+    <link rel="stylesheet" href="css/verHorarioMovil.css">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar">
+        <?php
+        try {
+            $pdoStatement = $pdo->prepare("SELECT name, lastname FROM usuario WHERE id_user = ?");
+            $pdoStatement->bindParam(1, $_SESSION['usuario_id']);
+            $pdoStatement->execute();
+            $usuario = $pdoStatement->fetch();
+            echo "<p>" . ucfirst($usuario['name']) . " " . ucwords($usuario['lastname']) . "</p>";
+        } catch (PDOException $e) {
+            echo "<p>Error al cargar los ciclos</p>";
+            error_log("Error en la consulta: " . $e->getMessage());
+        }
+        ?>
+        <a href="logout.php" class="logout">Logout</a>
+    </nav>
+<?php
 $idUsuario = $_SESSION['usuario_id'];
 
 $pdoStatement = $pdo->prepare("SELECT id_ciclo FROM USUARIO_CICLO WHERE id_user = ?");
@@ -31,8 +57,8 @@ $idCiclo = $pdoStatement->fetchColumn();
 
 $diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
 $horas = ["08:45", "09:35", "10:25", "11:15", "12:05", "12:55", "13:45"];
-
-echo "<table border='1' style='border-collapse: collapse; text-align: center;'>";
+echo '<div class="table-container">';
+echo "<table border='1'>";
 echo "<thead>";
 echo "<tr>";
 echo "<th>Horario</th>"; 
@@ -65,7 +91,7 @@ foreach ($horas as $hora) {
 }
 
 echo "</tbody>";
-echo "</table>";
+echo '</div>';
 
 // Obtener datos del alumno y ciclo para el PDF
 $pdoStatement = $pdo->prepare("SELECT name, lastname FROM usuario WHERE id_user = ?");
@@ -128,11 +154,14 @@ foreach ($horas as $hora) {
 ?>
 
 <!-- Botón para exportar a PDF -->
-<br>
-<button onclick="exportarPDF()">
+
+<div class="botones">
+<a href='mostra.php' class='volver'>Volver</a>
+<button class="exportar" onclick="exportarPDF()">
     Exportar a PDF
 </button>
-<br><br>
+</div>
+
 
 <!-- Scripts necesarios para exportar a PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -231,3 +260,5 @@ foreach ($horas as $hora) {
         }
     }
 </script>
+</body>
+</html>

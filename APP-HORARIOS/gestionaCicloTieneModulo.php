@@ -30,38 +30,45 @@ try {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/formularios.css">
+    <link rel="stylesheet" href="css/formulariosMovil.css">
         <title>Administración</title>
     </head>
     <body>
         <nav class="navbar">
-            <?php echo "<p>" . $_SESSION['usuario_nome']." (".$_SESSION['usuario_rol'].")" . "</p>"; ?>
-            <a href="logout.php">Logout</a>
-        </nav>
-
+            <?php echo "<p>" . ucfirst($_SESSION['usuario_nome']) . " (" . $_SESSION['usuario_rol'] . ")" . "</p>"; ?>        
+            <a href="logout.php" class="logout">Logout</a>
+        </nav> 
         <div class="form-container">
-            <form action="validaCicloTieneModulo.php" method="post">
-                <label for="idCiclo">Ciclo</label>
-                <select name="idCiclo">
-                    <?php
-                    foreach ($filas as $CTM) {
-                        echo "<option value='".$CTM['ciclo_id']."'>".$CTM['ciclo_name']."</option>";
-                    }
-                    ?>
-                </select>
-
-                <label for="idProfesor">Profesor</label>
-                <select name="idProfesor">
-                    <?php
-                    foreach ($filas2 as $profesor) {
-                        echo "<option value='".$profesor['id_profesor']."'>".$profesor['name']."</option>";
-                    }
-                    ?>
-                </select>
-
-                <input type='hidden' name='idModulo' value='<?=$_POST['idModulo']?>' >
-
-                <button type="submit">Enviar</button>
+            <form action="validaCicloTieneModulo.php" method="post" style="grid-template-columns: repeat(2, 1fr);">
+                <fieldset >
+                    <label for="idCiclo">Ciclo</label>
+                    <select name="idCiclo">
+                        <?php
+                        foreach ($filas as $CTM) {
+                            echo "<option value='".$CTM['ciclo_id']."'>".$CTM['ciclo_name']."</option>";
+                        }
+                        ?>
+                    </select>
+                </fieldset>
+                
+                <fieldset >
+                    <label for="idProfesor">Profesor</label>
+                    <select name="idProfesor">
+                        <?php
+                        foreach ($filas2 as $profesor) {
+                            echo "<option value='".$profesor['id_profesor']."'>".$profesor['name']."</option>";
+                        }
+                        ?>
+                    </select>    
+                </fieldset>
+                
+                <input type='hidden' name='idModulo' value='<?=$_POST['idModulo']?>' style="visibility:hidden;">
+                <div class="botones" style="left:42%">
+                    <button type="submit">Enviar</button>
+                    <a href='admin.php' class='volver'>Volver</a>
+                </div> 
+                             
             </form>
         </div>
 
