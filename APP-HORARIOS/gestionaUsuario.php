@@ -10,13 +10,14 @@ require_once "conexion.php";
 try {
     switch ($_POST["boton"]) {
         case 'editar':
-            $pdoStatement=$pdo->prepare("UPDATE usuario SET name=?, lastname=?, email=?, dni=?, login=? WHERE id_user=?");
+            $pdoStatement=$pdo->prepare("UPDATE usuario SET name=?, lastname=?, email=?, dni=?, login=?, curso=? WHERE id_user=?");
             $pdoStatement->bindParam(1, $_POST['nombreUsuario']);
             $pdoStatement->bindParam(2, $_POST['apellidoUsuario']);
             $pdoStatement->bindParam(3, $_POST['emailUsuario']);
             $pdoStatement->bindParam(4, $_POST['dniUsuario']);
             $pdoStatement->bindParam(5, $_POST['loginUsuario']);
             $pdoStatement->bindParam(6, $_POST['idUsuario']);
+            $pdoStatement->bindParam(7, $_POST['cursoUsuario']);
             break;
     
         case 'eliminar':

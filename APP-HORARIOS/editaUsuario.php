@@ -50,6 +50,14 @@ if (!empty($_SESSION['error'])) {
                 <label for="loginUsuario">Login</label>
                 <input type="text" name="loginUsuario" maxlength="9" value="<?=$_POST['loginUsuario']?>"  required>
             </fieldset>
+
+            <fieldset>
+                <label for="cursoUsuario">Curso</label>
+                <select name="cursoUsuario" required>
+                    <option value="1º">1º</option>
+                    <option value="2º">2º</option>
+                </select>
+            </fieldset>
             
             <input type='hidden' name='idUsuario' value='<?=$_POST['idUsuario']?>'>
             <div class="botones">

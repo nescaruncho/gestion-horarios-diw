@@ -57,6 +57,14 @@ if (empty($_SESSION['csrf_token'])) {
                 <input type="text" name="loginUsuario" maxlength="9" required>
             </fieldset>
 
+            <fieldset>
+                <label for="cursoUsuario">Curso</label>
+                <select name="cursoUsuario" required>
+                    <option value="1º">1º</option>
+                    <option value="2º">2º</option>
+                </select>
+            </fieldset>
+
             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
             <div class="botones">

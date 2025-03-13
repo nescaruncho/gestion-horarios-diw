@@ -15,13 +15,14 @@ if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_tok
 require_once "conexion.php";
 
 try {
-    $pdoStatement=$pdo->prepare("INSERT INTO usuario (name, lastname, email, dni, login, password) VALUES (?,?,?,?,?,?)");
+    $pdoStatement=$pdo->prepare("INSERT INTO usuario (name, lastname, email, dni, login, password, curso) VALUES (?,?,?,?,?,?,?)");
     $nombre=$_POST["nombreUsuario"];
     $apellido=$_POST["apellidosUsuario"];
     $email=$_POST["email"];
     $dni=$_POST["dniUsuario"];
     $login=$_POST["loginUsuario"];
     $contraseña=password_hash($_POST["contraseña"], PASSWORD_DEFAULT);
+    $curso=$_POST["cursoUsuario"];
     
     $pdoStatement->bindParam(1, $nombre);
     $pdoStatement->bindParam(2, $apellido);
@@ -29,6 +30,7 @@ try {
     $pdoStatement->bindParam(4, $dni);
     $pdoStatement->bindParam(5, $login);
     $pdoStatement->bindParam(6, $contraseña);
+    $pdoStatement->bindParam(7, $curso);
     $pdoStatement->execute();
 
     unset($_SESSION['csrf_token']);
