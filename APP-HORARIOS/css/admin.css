@@ -1,0 +1,117 @@
+@import url(estiloGeneral.css);
+@import url(navBar.css);
+@import url(scroll.css);
+@import url(barraLateral.css);
+@import url(mensajeError.css);
+
+.navbar .opciones-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tabla-container {
+    padding: 2rem 0rem !important;
+    background-color: #ffffff;
+    border-radius: 2px;
+    height: 81vh;
+    padding: 2rem;
+    transform: translateX(5%);
+    width: 76vw;
+    transition: width 0.5s ease-in-out;
+    position: relative; 
+    top: 9vh;
+}
+
+.tabla-container.collapsed {
+    width: 85vw;
+    transform: translateX(5%);
+}
+
+.divTabla {
+    width: -webkit-fill-available;
+    opacity: 0;
+    transition: opacity 0.5s ease-out; 
+}
+.product-table{    
+    max-height: 70vh; 
+    overflow-y: auto;
+}
+.tabla-container h2 {
+    color: #488cae;
+    margin: 0rem;
+    margin-bottom: 1rem;
+}
+
+.tabla-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.tabla-container th,
+.tabla-container td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla-container th {
+    background-color: #488cae;
+    color: #ffffff;
+}
+.tabla-container th:first-of-type {
+    border-top-left-radius: 3px;
+}
+.tabla-container th:last-of-type {
+    border-top-right-radius: 3px;
+}
+.tabla-container tr:nth-child(even) {
+    background-color: rgb(226, 226, 226); 
+}
+
+.tabla-container tr:nth-child(odd) {
+    background-color: #c4d9e4;; 
+}
+
+button {
+    padding: 0.4rem 0.9rem; 
+    color: #ffffff; 
+    font-weight: bold; 
+    transition: all 0.3s ease; 
+    margin-bottom: 0.25rem; 
+    min-width: 80px;
+}
+
+button.eliminar {
+    background-color: #f4791b; 
+}
+
+button.editar {
+    background-color: #2bc187; 
+}
+
+button.crear {
+    background-color: #488cae; 
+        padding: 0.5rem 1rem; 
+    margin-bottom: 1rem;
+    font-size: 0.9rem; 
+    min-width: 100px; 
+}
+
+
+button.vincular {
+    background-color: #488cae; 
+}
+
+button:active {
+    transform: scale(0.95); 
+}
+
+button.crear:active {
+    transform: scale(0.97);
+}
+
+.tabla-visible {
+    opacity: 1; 
+}

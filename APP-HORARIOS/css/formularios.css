@@ -1,0 +1,192 @@
+@import url(estiloGeneral.css);
+@import url(navBar.css);
+@import url(scroll.css);
+@import url(mensajeError.css);
+
+.botones{
+    width: fit-content;
+    top: 80px;
+    left: 40%;
+    display: flex;
+    gap: 1rem; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 1rem;
+    position: absolute;
+}
+
+button, .volver {
+    background-color: #488cae;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    display: block;
+    transition: all 0.3s ease;
+    width: fit-content;
+}
+
+button:hover {
+    background-color: #f4791b;
+}
+
+.volver{    
+    background-color: #c4d9e4;
+    text-decoration: none;
+    color: #5f5f5f;
+    font-size: 0.9rem;
+}
+
+body {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.form-container {
+    background-color: #ffffff;
+    padding: 3rem 2rem;
+    border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 5px 30px;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 2rem;
+    column-gap: 1rem;
+}
+h2{
+    position: relative;
+    top:-15px;
+    color: #488cae;
+}
+
+form fieldset {
+    border: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.form-container input:focus, .form-container select:focus {
+    border-color: #f4791b; 
+    outline: none;
+}
+
+.form-container label {
+    color: #488cae;
+    font-weight: bold;
+    margin-bottom: 0.2rem;
+    font-size: 0.8rem;
+}
+
+.form-container input, .form-container select{
+    width: -webkit-fill-available;
+    padding: 0.8rem;
+    border: 2px solid #488cae;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+}
+
+.form-container button[type="submit"], .form-container input[type="submit"], .volver {
+    width: fit-content;
+    padding: 0.4rem 0.9rem;
+    background-color: #488cae;
+    color: #ffffff;
+    border: none;
+    border-radius: 2px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+
+}
+.form-container button[type="submit"]:hover, .form-container input[type="submit"]:hover {
+    background-color: #f4791b;
+    transform: translateY(-2px);
+}
+
+.volver{
+    background-color: #c4d9e4;
+    text-decoration: none;
+    color: #5f5f5f;
+    border: none;
+    border-radius: 2px;
+    font-size: 0.9rem;
+}
+
+.radioFieldeset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    flex-direction: row;
+}
+
+
+.radioFieldeset .radio-option, .radioFieldeset input[type="checkbox"] {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.radioFieldeset input[type="radio"], .radioFieldeset input[type="checkbox"] {
+    margin: 0;
+    padding: 0rem;
+    margin-right: 0.5rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    cursor: pointer;
+}
+
+.radioFieldeset label {
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+    text-align: center;    
+}
+.radioFieldeset:has(input[type="radio"]) label {
+    align-content: center;
+}
+
+.radioFieldeset input[type="radio"], .radioFieldeset input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #488cae;
+    border-radius: 2px;
+    position: relative;
+}
+.radioFieldeset input[type="radio"]{
+    border-radius: 50%;
+}
+
+.radioFieldeset input[type="radio"]:checked, .radioFieldeset input[type="checkbox"]:checked {
+    background-color: #488cae;
+    border-color: #488cae;
+}
+
+.radioFieldeset input[type="radio"]:checked::before, .radioFieldeset input[type="checkbox"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.6rem;
+    height: 0.6rem;
+    background: white;
+    border-radius: 2px;
+}
+.radioFieldeset input[type="radio"]:checked::before {
+    border-radius: 50%;
+}

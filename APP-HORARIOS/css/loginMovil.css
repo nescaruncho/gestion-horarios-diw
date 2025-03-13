@@ -1,0 +1,22 @@
+@import url(mensajeError.css);
+@media (max-width: 768px) {
+    
+    .form-container {
+        max-width: min-content;
+        height: auto;
+    }
+
+    form {
+        font-size: 0.8rem;
+    }
+    
+    .form-container input{
+        padding: 0.6rem !important;
+    }
+
+    .form-container button[type="submit"] {
+        padding: 0.4rem 0.9rem;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+}
