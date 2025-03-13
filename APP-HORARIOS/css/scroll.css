@@ -1,6 +1,7 @@
 
 *::-webkit-scrollbar {
     width: 12px; 
+    margin: 0.5rem;
 }
 
 *::-webkit-scrollbar-track {

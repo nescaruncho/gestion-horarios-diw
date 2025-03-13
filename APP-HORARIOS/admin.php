@@ -352,7 +352,8 @@ require_once "conexion.php";
                                         echo "<form action='gestionaSesion.php' method='post'>";
                                         echo $sesion['dia_semana'].": ".$sesion['hora_inicio']." - ".$sesion['hora_fin']." | Aula: ".$sesion['aula'];
                                         echo "<input type='hidden' name='idSesion' value='".$sesion['id_sesion']."'>";
-                                        echo " "."<button type='submit' name='boton' value='eliminar' class='eliminar'>Eliminar</button>";
+                                        echo " "."<button type='submit' name='boton' value='eliminar' class='eliminar'
+                                                    style='margin-left:0.7rem;'>Eliminar</button>";
                                         echo "</form>";
                                         echo "<br>";
                                     }

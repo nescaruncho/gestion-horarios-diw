@@ -10,7 +10,20 @@
     gap: 0.5rem;
 }
 
+.navbar .opcion{
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+}
+
+.navbar .opcion:hover {
+    color:#c4d9e4;
+}
 .tabla-container {
+    overflow: scroll;
     padding: 2rem 0rem !important;
     background-color: #ffffff;
     border-radius: 2px;

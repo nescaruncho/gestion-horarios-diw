@@ -10,32 +10,38 @@
     gap: 0.5rem;
 }
 
-.navbar .opcion {
+.navbar .opcion, button.verHorario {
     color: #ffffff;
     text-decoration: none;
     font-size: 1rem;
     font-weight: bold;
     padding: 0.5rem 1rem;
-    transition: color 0.3s ease;
     white-space: nowrap;
 }
 
-.navbar .opcion:hover {
+.navbar .opcion:hover, button.verHorario:hover {
     color:#c4d9e4;
 }
 
-.navbar .divisor {
-    width: 1px;
-    height: 20px;
-    background-color: #ffffff;
+button.verHorario{
+    display: flex;
+    font-weight: normal;
+    padding: 0;
+    background-color: transparent;
+    font-size: 0.8rem;
+    justify-content: flex-start;
+    
 }
-
+button.verHorario:hover{
+    transform: translateY(0px);
+}
 .tabla-container {
+    overflow: scroll;
     padding: 2rem 0rem !important;
     background-color: #ffffff;
     border-radius: 2px;
 
-    height: 81vh;
+    height: 91vh;
     padding: 2rem;
     transform: translateX(5%);
     width: 76vw;

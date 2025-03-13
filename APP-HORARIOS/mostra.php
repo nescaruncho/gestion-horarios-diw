@@ -30,8 +30,8 @@ require_once "conexion.php";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="css/adminMovil.css">
+    <link rel="stylesheet" href="css/mostra.css">
+    <link rel="stylesheet" href="css/mostraMovil.css">
     <title>Panel de alumno</title>
 </head>
 <body>
@@ -59,6 +59,14 @@ require_once "conexion.php";
                 <a href="#" class="menu-item opcion" data-tabla="modulos">
                     <span class="icon"><i class="fas fa-chart-bar"></i></span>
                     <span class="text">Modulos</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-item" >
+                    <span class="icon"><i class="fas fa-calendar-days"></i></span>                    
+                    <form action="verHorario.php" method="post" class="verHorario">
+                        <button type="submit" class="verHorario"><span class="text" style="margin:0;">Ver horario</span></button>
+                    </form>
                 </a>
             </li>
         </ul>
