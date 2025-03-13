@@ -1,7 +1,0 @@
-radio borde 2px
-azul #488cae; 
-naranja #f4791b;
-verde #2bc187; 
-azul clarito #c4d9e4;
-gris oscuro  #1d2125;
-gris medio  #5f5f5f;;
