@@ -27,6 +27,7 @@ try {
             $_SESSION['usuario_nome'] = $fila['name'];
             $_SESSION['usuario_id'] = $fila['id_user'];
             $_SESSION['usuario_rol'] = $fila['rol'];
+            $_SESSION['usuario_curso'] = $fila['curso'];
             $_SESSION['logged_in'] = true;
 
             unset($_SESSION['csrf_token']);

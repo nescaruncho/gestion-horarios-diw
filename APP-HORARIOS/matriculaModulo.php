@@ -77,14 +77,16 @@ require_once "conexion.php";
                                         SELECT m.id_modulo, m.name, m.curso, m.horas_totales
                                         FROM modulo m
                                         INNER JOIN ciclo_tiene_modulo ctm ON m.id_modulo = ctm.id_modulo
-                                        WHERE ctm.id_ciclo = ?
+                                        WHERE ctm.id_ciclo = ? 
+                                        AND m.curso = ?
                                         AND m.id_modulo NOT IN (
                                             SELECT id_modulo
                                             FROM user_modulo
                                             WHERE id_user = ?
                         )");                        
                         $pdoStatement->bindParam(1, $cicloUsuario['id_ciclo']);
-                        $pdoStatement->bindParam(2, $_SESSION['usuario_id']);
+                        $pdoStatement->bindParam(2, $_SESSION['usuario_curso']);
+                        $pdoStatement->bindParam(3, $_SESSION['usuario_id']);
                         $pdoStatement->execute();
                         $modulos = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
 

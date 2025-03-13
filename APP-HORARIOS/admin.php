@@ -358,6 +358,7 @@ require_once "conexion.php";
                                     }
                                         echo "<form action='creaSesion.php' method='post'>";
                                         echo "<input type='hidden' name='idCicloModulo' value='".$data['id_ciclo_modulo']."'>";
+                                        echo "<input type='hidden' name='idCiclo' value='".$ciclo['id_ciclo']."'>";
                                         echo "<button type='submit' name='boton' value='crear' class='crear'>Crear nueva</button>";
                                         echo "</form>";
                                     echo "</td>";
