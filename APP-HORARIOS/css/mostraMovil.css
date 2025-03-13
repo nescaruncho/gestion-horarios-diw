@@ -1,0 +1,41 @@
+@import url(estiloGeneral.css);
+@import url(navBar.css);
+@import url(scroll.css);
+@import url(barraLateral.css);
+@import url(barraLateralMovil.css);
+@import url(estiloGeneralMovil.css);
+@import url(navBarMovil.css);
+@import url(scroll.css);
+@import url(mensajeError.css);
+
+@media (max-width: 768px) {
+    .verHorario span {
+        margin-left: 1.1rem!important;
+    }
+    .tabla-container {
+        width: 90vw !important;
+        margin-left: 0 !important;
+        transform: translateX(0) !important;
+        padding: 1rem !important;
+        top: 60px;
+        height: calc(100vh - 60px) !important;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tabla-container.shifted {
+        transform: translateX(85vw) !important;
+    }
+
+    .product-table {
+        max-height: 75vh !important;
+    }
+
+    button {
+        padding: 0.4rem 0.9rem;
+        font-size: 0.7rem !important;
+    }    
+    .tabla-container td {
+        padding: 0.2rem;
+        text-align: center;
+    }
+}
